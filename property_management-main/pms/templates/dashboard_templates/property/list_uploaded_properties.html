@@ -1,0 +1,167 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% load custom_template_tags %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+
+  .custom {
+    color: darkblue;
+  }
+
+  .chart-container {
+    margin: auto;
+  }
+
+  #sub {
+    cursor: default !important;
+    color: green;
+  }
+
+  #no_sub {
+    cursor: default !important;
+    color: red;
+  }
+
+  .razorpay-payment-button {
+    align-items: center;
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    font-family: Phantomsans, sans-serif;
+    font-size: 20px;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 120px;
+    min-width: 120px;
+    padding: 10px 10px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .razorpay-payment-button:active,
+  .razorpay-payment-button:hover {
+    outline: 0;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">Your Properties</h1>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Property ID</th>
+                    <th scope="col">Uploaded On</th>
+                    <th scope="col">Property Type</th>
+                    <th scope="col">Membership</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Image</th>
+                    {% if seller %}
+
+                    <th scope="col">Edit</th>
+
+                    <th scope="col">Delete</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in property_list %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ i.property_id }}</td>
+                        <td>{{ i.created_on }}</td>
+                        <td>{{ i.type|replace_underscores }}</td>
+                        <td>
+                            {% if i.property_membership.all %}
+                                <i class="fas fa-check fa-2x" id="sub"></i>
+                            {% else %}
+                                <form action="{% url 'payment_success_membership' i.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <script src="https://checkout.razorpay.com/v1/checkout.js"
+                                            data-key="{{api_key}}"
+                                            data-amount="{{amount}}"
+                                            data-currency="INR"
+                                            data-buttontext="Buy Now"
+                                            data-theme.color="#F37254"
+                                            data-name="Dream Homes"></script>
+                                    <input type="hidden" custom="Hidden Element" name="hidden" />
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'view_property' i.id 'view' %}"
+                               target="_blank"
+                               class="btn btn-success"><i class="fas fa-eye"></i
+                            ></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'view_property_images' i.id %}"
+                               target="_blank"
+                               class="btn btn-warning"><i class="fas fa-eye"></i
+                            ></a>
+                        </td>
+                        {% if seller %}
+
+                        <td>
+                            <a href="{% url 'update_property' i.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i
+                            ></a>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'delete_property' i.id %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i
+                            ></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+  $(document).ready(function () {
+    $("#myTable").DataTable();
+  });
+    </script>
+{% endblock %}

@@ -1,0 +1,412 @@
+{% extends 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% load custom_template_tags %}
+{% block css %}
+    <style>
+    #warning_symbol {
+        color: rgb(236, 6, 6);
+    }
+    .hide {
+        display: none;
+    }
+    #warning_symbol:hover+.hide {
+        display: block;
+        color: red;
+        font-size: 12px;
+    }
+    </style>
+{% endblock %}
+{% block body %}
+    <script src="{% static 'geolocation.js' %}"></script>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        {% if  view_property %}
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h4 class="h4 text-gray-800 mt-4 mb-4">View Property Details</h4>
+        </div>
+        {% else %}
+        <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <h4 class="h4 text-gray-800 mt-4 mb-4">Update Property</h4>
+            </div>
+        {% endif %}
+        {% for i in requested_property %}
+            <div class="container">
+                <form action="{% url 'update_property' i.id %}"
+                      method="POST"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">I'm Looking To</label>
+                        <select class="form-control" id="property_sr" name="property_sr" required>
+                            {% if i.sell_rent == 'Sell' %}
+                                <option value="Sell" selected>Sell</option>
+                                <option value="Rent">Rent</option>
+                            {% else %}
+                                <option value="Rent" selected>Rent</option>
+                                <option value="Sell">Sell</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">What Kind of Property You Have</label>
+                        <select class="form-control" id="property_type" name="property_type" required>
+                            {% if i.type == 'Apartment' %}
+                                <option value="Apartment" selected>Apartment</option>
+                                <option value="Independent_Floor">Independent/Builder Floor</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Duplex">Duplex</option>
+                            {% elif i.type == 'Independent_Floor' %}
+                                <option value="Independent_Floor" selected>Independent/Builder Floor</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Duplex">Duplex</option>
+                            {% elif i.type == 'Villa' %}
+                                <option value="Villa" selected>Villa</option>
+                                <option value="Independent_Floor">Independent/Builder Floor</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Duplex">Duplex</option>
+                            {% else %}
+                                <option value="Duplex" selected>Duplex</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Independent_Floor">Independent/Builder Floor</option>
+                                <option value="Apartment">Apartment</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="property_address">Where is your Property Located</label>
+                        <textarea class="form-control" id="property_address" name="property_address"
+                                  rows="2" required placeholder="Enter Complete Address">{{i.address}}</textarea>
+                    </div>
+                    <div class="row form-group">
+                        <input type="hidden" name="country" id="countryId" value="IN"/>
+                        <div class="col">
+                            <input type="text" class="form-control" name='property_state'
+                                   value="{{ i.state }}" placeholder="State" readonly>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name='property_city' value="{{ i.city }}"
+                                   placeholder="City" readonly>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name='zip_code'
+                                   value="{{ i.zip_code }}" placeholder="Zip Code">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="name">No. of Bedrooms</label>
+                            <select class="form-control" id="no_bedrooms" name="no_bedrooms" required>
+                                {% if i.bedrooms == 'one' %}
+                                    <option value="one" selected>1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% elif i.bedrooms == 'two' %}
+                                    <option value="one">1</option>
+                                    <option value="two" selected>2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% elif i.bedrooms == 'three' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three" selected>3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% elif i.bedrooms == 'four' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four" selected>4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% elif i.bedrooms == 'five' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five" selected>5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% elif i.bedrooms == 'six' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six" selected>6</option>
+                                    <option value="greater_then_6">More than 6</option>
+                                {% else %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="greater_then_6" selected>More than 6</option>                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="name">No. of Bathrooms</label>
+                            <select class="form-control" id="no_bathrooms" name="no_bathrooms" required>
+                                {% if i.bathrooms == 'one' %}
+                                    <option value="one" selected>1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.bathrooms == 'two' %}
+                                    <option value="one">1</option>
+                                    <option value="two" selected>2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.bathrooms == 'three' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three" selected>3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.bathrooms == 'four' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four" selected>4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% else %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4" selected>More than 4</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="name">No. of Balconies</label>
+                            <select class="form-control" id="no_balconies" name="no_balconies" required>
+                                {% if i.balconies == 'one' %}
+                                    <option value="one" selected>1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.balconies == 'two' %}
+                                    <option value="one">1</option>
+                                    <option value="two" selected>2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.balconies == 'three' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three" selected>3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% elif i.balconies == 'four' %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four" selected>4</option>
+                                    <option value="greater_then_4">More than 4</option>
+                                {% else %}
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="greater_then_4" selected>More than 4</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="area_details">Area Details (Sq.Ft)</label>
+                            <input type="number" min="0" name="area_details" class="form-control" id="area_details" value="{{ i.area }}"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="furnishing_type">Furnishing</label>
+                            <select class="form-control" id="furnishing_type" name="furnishing_type" required>
+                                {% if i.furnishing == 'Furnished' %}
+                                    <option value="Furnished" selected>Furnished</option>
+                                    <option value="Semi">Semi-Furnished</option>
+                                    <option value="Unfunished">Un-funished</option>
+                                {% elif i.furnishing == 'Semi' %}
+                                    <option value="Furnished">Furnished</option>
+                                    <option value="Semi" selected>Semi-Furnished</option>
+                                    <option value="Unfunished">Un-funished</option>
+                                {% else %}
+                                    <option value="Furnished">Furnished</option>
+                                    <option value="Semi">Semi-Furnished</option>
+                                    <option value="Unfunished" selected>Un-funished</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label for="open_parking">Open Parking</label>
+                                    <input type="number" min="0" value="{{ i.open_parking }}" name="open_parking" class="form-control">
+                                </div>
+                                <div class="col">
+                                    <label for="covered_parking">Covered Parking</label>
+                                    <input type="number" min="0" value="{{ i.covered_parking }}" name="covered_parking" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="availability_status">Availability Status</label>
+                            <select class="form-control" id="availability_status" name="availability_status" required>
+                                {% if i.availability == 'RM' %}
+                                    <option value="RM" selected>Ready to Move</option>
+                                    <option value="UC">Under Construction</option>
+                                {% else %}
+                                    <option value="RM">Ready to Move</option>
+                                    <option value="UC" selected>Under Construction</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="property_age">Age of Property</label>
+                            <select class="form-control" id="property_age" name="property_age" required>
+                                {% if i.age == 'zero_one' %}
+                                    <option value="zero_one" selected>0-1 Years</option>
+                                    <option value="one_five">1-5 Years</option>
+                                    <option value="five_ten">5-10 Years</option>
+                                    <option value="ten_fifteen">10-15 Years</option>
+                                    <option value="more_then_fivteen">More than 15 Years</option>
+                                {% elif i.age == 'one_five' %}
+                                    <option value="zero_one">0-1 Years</option>
+                                    <option value="one_five" selected>1-5 Years</option>
+                                    <option value="five_ten">5-10 Years</option>
+                                    <option value="ten_fifteen">10-15 Years</option>
+                                    <option value="more_then_fivteen">More than 15 Years</option>
+                                {% elif i.age == 'five_ten' %}
+                                    <option value="zero_one">0-1 Years</option>
+                                    <option value="one_five">1-5 Years</option>
+                                    <option value="five_ten" selected>5-10 Years</option>
+                                    <option value="ten_fifteen">10-15 Years</option>
+                                    <option value="more_then_fivteen">More than 15 Years</option>
+                                {% elif i.age == 'ten_fifteen' %}
+                                    <option value="zero_one">0-1 Years</option>
+                                    <option value="one_five">1-5 Years</option>
+                                    <option value="five_ten">5-10 Years</option>
+                                    <option value="ten_fifteen" selected>10-15 Years</option>
+                                    <option value="more_then_fivteen">More than 15 Years</option>
+                                {% else %}
+                                    <option value="zero_one">0-1 Years</option>
+                                    <option value="one_five">1-5 Years</option>
+                                    <option value="five_ten">5-10 Years</option>
+                                    <option value="ten_fifteen">10-15 Years</option>
+                                    <option value="more_then_fivteen" selected>More than 15 Years</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="property_ownership">Ownership</label>
+                            <select class="form-control" id="property_ownership" name="property_ownership" required>
+                                {% if i.ownership == 'Freehold' %}
+                                    <option value="Freehold" selected>Freehold</option>
+                                    <option value="Leasehold">Leasehold</option>
+                                    <option value="Cooperative Society">Co-Operative Society</option>
+                                    <option value="POA">Power of Attorney</option>
+                                {% elif i.ownership == 'Leasehold' %}
+                                    <option value="Freehold">Freehold</option>
+                                    <option value="Leasehold" selected>Leasehold</option>
+                                    <option value="Cooperative Society">Co-Operative Society</option>
+                                    <option value="POA">Power of Attorney</option>
+                                {% elif i.ownership == 'Cooperative Society' %}
+                                    <option value="Freehold">Freehold</option>
+                                    <option value="Leasehold">Leasehold</option>
+                                    <option value="Cooperative Society" selected>Co-Operative Society</option>
+                                    <option value="POA">Power of Attorney</option>
+                                {% else %}
+                                    <option value="Freehold">Freehold</option>
+                                    <option value="Leasehold">Leasehold</option>
+                                    <option value="Cooperative Society">Co-Operative Society</option>
+                                    <option value="POA" selected>Power of Attorney</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="expected_price">Expected Price (Rs)</label>
+                            <input type="number" min="0" value="{{ i.expected_price }}" class="form-control"
+                                   name='expected_price' id="expected_price" placeholder="Expected Price">
+                        </div>
+                        <div class="col">
+                            <label for="price_sq_ft">Price per Sq.Ft (Rs)</label>
+                            <input type="number" min="0" value="{{ i.area_price }}" id="price_sq_ft" class="form-control" name='price_sq_ft' placeholder="Price Sq.Ft" readonly>
+                        </div>
+                    </div>
+                    {% if not view_property %}
+                        <div class="form-group">
+                            <label class="form-label mr-2" for="property_images">Upload Property Image</label>
+                            <i class="fas fa-exclamation-triangle" id="warning_symbol"></i>
+                            <div class="hide">
+                                Note: (If you want to update the property images, then choose previous images that you
+                                uploaded before else leave this field empty!!!)
+                            </div>
+                            <input type="file" class="form-control" accept="image/*" multiple id="property_images" name='property_images'/>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label class="form-label" for="amenities">Amenities</label>
+                        <textarea class="form-control" id="amenities" name="amenities" rows=6 required>{{i.amenities}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="property_unique_details">Property Description</label>
+                        <textarea class="form-control" id="property_unique_details" name="property_unique_details" rows="4" required>{{i.details}}</textarea>
+                    </div>
+                    {% if not view_property %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    {% endif %}
+                </form>
+            </div>
+        {% endfor %}
+        {% block js %}
+            <script type="text/javascript">
+        $(document).ready(function() {
+          $('#expected_price').keyup(function() {
+              var total_area_size = parseFloat($('#area_details').val());
+              var expected_amount = parseFloat($('#expected_price').val());
+              var price_per_sq_ft = expected_amount / total_area_size
+              $('#price_sq_ft').val(price_per_sq_ft.toFixed(2));
+          });
+        });
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//geodata.solutions/includes/statecity.js"></script>
+            </script>
+        {% endblock %}
+    {% endblock %}

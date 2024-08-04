@@ -1,0 +1,226 @@
+{% extends 'ui_templates/base.html' %}
+{% load custom_template_tags %}
+{% load humanize %}
+{% load static %}
+{% block css %}
+    <style>
+	.property-wrap .text h3 a {
+		color: #0000008c;
+		font-weight: 500;
+	}
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="hero-wrap ftco-degree-bg"
+         style="background-image: url('static/ui_templates_static_files/images/bg_1.jpg')"
+         data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text justify-content-center align-items-center">
+                <div class="col-lg-8 col-md-6 ftco-animate d-flex align-items-end">
+                    <div class="text text-center">
+                        <h1 class="mb-4"> The Simplest <br> Way to Find Property
+                        </h1>
+                        <form action="{% url 'all_properties' %}" method="GET" class="search-location mt-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-10 align-items-end">
+                                    <div class="form-group">
+                                        <div class="form-field">
+                                            <input type="text" class="form-control" placeholder="Search location" name="searching_filters">
+                                            <button>
+                                                <span class="ion-ios-search"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mouse">
+            <a href="#" class="mouse-icon">
+                <div class="mouse-wheel">
+                    <span class="ion-ios-arrow-round-down"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <section class="ftco-section ftco-no-pb">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                    <span class="subheading">Our Services</span>
+                    <h2 class="mb-2">The smartest way to buy a home</h2>
+                </div>
+            </div>
+            <div class="row d-flex">
+                <div class='col-md-2'></div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services d-block text-center">
+                        <div class="icon d-flex justify-content-center align-items-center">
+                            <span>
+                                <img class="buy_image"
+                                     src="{% static 'ui_templates_static_files/font-images/buy.png' %}">
+                            </img>
+                        </span>
+                    </div>
+                    <div class="media-body py-md-4">
+                        <h3>Buy</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services d-block text-center">
+                    <div class="icon d-flex justify-content-center align-items-center">
+                        <span>
+                            <img class="buy_image"
+                                 src="{% static 'ui_templates_static_files/font-images/sale.png' %}">
+                        </img>
+                    </span></span>
+                </div>
+                <div class="media-body py-md-4">
+                    <h3>Sell</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services d-block text-center">
+                <div class="icon d-flex justify-content-center align-items-center">
+                    <span>
+                        <img class="buy_image"
+                             src="{% static 'ui_templates_static_files/font-images/rent.png' %}">
+                    </img>
+                </span>
+            </div>
+            <div class="media-body py-md-4">
+                <h3>Rent</h3>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+<section class="ftco-section goto-here">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                <span class="subheading">What we offer</span>
+                <h2 class="mb-2">Exclusive Offer For You</h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for property in random_properties %}
+                <div class="col-md-4">
+                    <div class="property-wrap ftco-animate">
+                        <a href="{% url 'property_details' property.id %}"
+                           class="img"
+                           style="background-image: url({{ property.property_images.first.images.url }})"></a>
+                        <div class="text">
+                            {% if property.property_sr == 'Sell' %}
+                                <p class="price">
+                                    <span class="orig-price">Sell | Rs {{ property.expected_price }}<small></small></span>
+                                </p>
+                            {% else %}
+                                <p class="price">
+                                    <span class="orig-price">Rent | Rs {{ property.expected_price }} / mo<small></small></span>
+                                </p>
+                            {% endif %}
+                            <ul class="property_list">
+                                <li>
+                                    <span class="flaticon-bed"></span>{{ property.bedrooms|number_value }}
+                                </li>
+                                <li>
+                                    <span class="flaticon-bathtub"></span>{{ property.bathrooms|number_value }}
+                                </li>
+                                <li>
+                                    <span class="flaticon-floor-plan"></span>{{ property.area }} ft
+                                    <sup>2</sup>
+                                </li>
+                            </ul>
+                            <h3>
+                                <a href="{% url 'property_details' property.id %}">Property ID: {{ property.property_id }}</a>
+                            </h3>
+                            <span class="location">{{ property.state }}</span>
+                            <a href="{% url 'property_details' property.id %}"
+                               class="d-flex align-items-center justify-content-center btn-custom">
+                                <span class="ion-md-arrow-forward"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="ftco-section ftco-agent ftco-no-pt">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Agents</span>
+                <h2 class="mb-4">Our Agents</h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for agent in random_agents %}
+                <div class="col-md-3 ftco-animate">
+                    <div class="agent">
+                        <div class="img">
+                            {% if agent.user_image %}
+                                <img src="{{ agent.user_image.url }}" class="img-fluid" alt="Agent Image">
+                            {% else %}
+                                <img src="{% static 'assets/img/no_image.jpg' %}"
+                                     class="img-fluid"
+                                     alt="Agent Image">
+                            {% endif %}
+                        </div>
+                        <div class="desc">
+                            <h3>
+                                <a href="properties.html">{{ agent.user.first_name }} {{ agent.user.last_name }}</a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="ftco-section ftco-no-pt">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <span class="subheading">Blog</span>
+                <h2>Recent Blogs</h2>
+            </div>
+        </div>
+        <div class="row d-flex">
+            {% for blog in index_page_blogs %}
+                <div class="col-md-3 d-flex ftco-animate">
+                    <div class="blog-entry justify-content-end">
+                        <div class="text">
+                            <h3 class="heading">
+                                <a href="{% url 'blog_description' blog.id %}">{{ blog.blog_title }}</a>
+                            </h3>
+                            <div class="meta mb-3">
+                                <div>
+                                    <a href="{% url 'blog_description' blog.id %}">{{ blog.created_at }}</a>
+                                </div>
+                            </div>
+                            {% if blog.blog_image %}
+                                <a href="{% url 'blog_description' blog.id %}"
+                                   class="block-20 img"
+                                   style="background-image: url({{ blog.blog_image.url }})"></a>
+                            {% else %}
+                                <a href="{% url 'blog_description' blog.id %}"
+                                   class="block-20 img"
+                                   style="background-image: url({% static 'assets/img/no_image.jpg' %})"></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

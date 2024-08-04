@@ -1,0 +1,216 @@
+{% extends 'ui_templates/base.html' %}
+{% load custom_template_tags %}
+{% load
+static %}
+{% block css %}<style></style>{% endblock %}
+{% block body %}
+    <section class="ftco-section ftco-property-details">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="property-details">
+                        <div class="img"
+                             style="background-image: url('{{ property_images.0.images.url }}')"></div>
+                        <div class="text text-center">
+                            <span class="subheading">{{ property.property_id }}</span>
+                            <a target="_blank"
+                               class="mt-2 btn btn-primary"
+                               href="{% url 'view_property_images' property.id %}">View More Images</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pills">
+                        <div class="bd-example bd-example-tabs">
+                            <div class="d-flex justify-content-center">
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active"
+                                           id="pills-description-tab"
+                                           data-toggle="pill"
+                                           href="#pills-description"
+                                           role="tab"
+                                           aria-controls="pills-description"
+                                           aria-expanded="true">Features</a
+                                            >
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                               id="pills-manufacturer-tab"
+                                               data-toggle="pill"
+                                               href="#pills-manufacturer"
+                                               role="tab"
+                                               aria-controls="pills-manufacturer"
+                                               aria-expanded="true">Description</a
+                                                >
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link"
+                                                   id="pills-review-tab"
+                                                   data-toggle="pill"
+                                                   href="#pills-review"
+                                                   role="tab"
+                                                   aria-controls="pills-review"
+                                                   aria-expanded="true">Contact Us</a
+                                                    >
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="tab-content" id="pills-tabContent">
+                                            <div class="tab-pane fade show active"
+                                                 id="pills-description"
+                                                 role="tabpanel"
+                                                 aria-labelledby="pills-description-tab">
+                                                <div class="row">
+                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-8">
+                                                        <ul class="features">
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Area:
+                                                                {{ property.area }} SQ FT
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Bed Rooms:
+                                                                {{ property.bedrooms|number_value }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Bath Rooms:
+                                                                {{ property.bathrooms|number_value }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Balconies:
+                                                                {{ property.balconies|number_value }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Furnishing:
+                                                                {{ property.furnishing }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Ownership:
+                                                                {{ property.ownership }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Open Parkings:
+                                                                {{ property.open_parking }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Covered Parkings:
+                                                                {{ property.covered_parking }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Age:
+                                                                {% if property.age == 'zero_one' %}
+                                                                    0-1 Years
+                                                                {% elif property.age == 'one_five' %}
+                                                                    1-5 Years
+                                                                {% elif property.age == 'five_ten' %}
+                                                                    5-10 Years
+                                                                {% elif property.age == 'ten_fifteen' %}
+                                                                    10-15 Years 
+                                                                {%elif property.age == 'more_then_fivteen' %} 15+
+                                                                    Years
+                                                                {% endif %}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>State:
+                                                                {{ property.state }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>City:
+                                                                {{ property.city }}
+                                                            </li>
+                                                            <li class="check">
+                                                                <span class="ion-ios-checkmark"></span>Zip Code:
+                                                                {{ property.zip_code }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade"
+                                                 id="pills-manufacturer"
+                                                 role="tabpanel"
+                                                 aria-labelledby="pills-manufacturer-tab">
+                                                <p>Address: {{ property.address }}</p>
+                                                <p>{{ property.details }}</p>
+                                            </div>
+                                            <div class="tab-pane fade"
+                                                 id="pills-review"
+                                                 role="tabpanel"
+                                                 aria-labelledby="pills-review-tab">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="row section-t3">
+                                                            <div class="col-sm-12">
+                                                                <div class="title-box-d">
+                                                                    <h3 class="title-d">Contact</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-3 col-lg-3">
+                                                                <div class="property-agent">
+                                                                    <h6 class="title-agent">
+                                                                        {{ property.uploaded_by.first_name }}
+                                                                        {{ property.uploaded_by.last_name }}
+                                                                    </h6>
+                                                                    <br />
+                                                                    <ul class="list-unstyled">
+                                                                        <li class="d-flex justify-content-between">
+                                                                            <strong>Email ID:</strong>
+                                                                            <span class="color-text-a">{{ property.uploaded_by.email }}</span>
+                                                                            </li>
+                                                                            <li class="d-flex justify-content-between">
+                                                                                <strong>Mobile:</strong>
+                                                                                <span class="color-text-a">{{ property.uploaded_by.user_profile.contact }}</span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-lg-3"></div>
+                                                                    <div class="col-md-6 col-lg-6">
+                                                                        <div class="property-contact">
+                                                                            <form class="form-a" method="POST" action="{% url 'property_comments' property.id %}">
+                                                                                {% csrf_token %}
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12 mb-2">
+                                                                                        <div class="form-group">
+                                                                                            <input type="text" class="form-control form-control-lg form-control-a" id="inputName" placeholder="Name" name="name" required/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12 mb-2">
+                                                                                        <div class="form-group">
+                                                                                            <input type="email" class="form-control form-control-lg form-control-a" id="inputEmail1" placeholder="Email" name="email" required/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12 mb-2">
+                                                                                        <div class="form-group">
+                                                                                            <input type="text" class="form-control form-control-lg form-control-a" id="inputContact" max="10" placeholder="Contact" name="contact" required/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12 mb-2">
+                                                                                        <div class="form-group">
+                                                                                            <textarea id="textMessage" class="form-control" placeholder="Comment" cols="45" rows="8" name="comment" required></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12 mt-3">
+                                                                                        <button type="submit" class="btn btn-primary">Send Message</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        {% endblock %}

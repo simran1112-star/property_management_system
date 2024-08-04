@@ -1,0 +1,31 @@
+{% extends 'ui_templates/base.html' %}
+{% block css %}
+    <style>
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
+  .wrapper {
+    min-height: 100%;
+  }
+  .main {
+    width: 900px;
+    /* Can be in percentage also. */
+    height: auto;
+    margin: 150px auto;
+    padding: 10px;
+    position: relative;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container wrapper">
+        <div class="main">
+            <p class="text">
+                Thanks. Your Payment is Successful. We have email you a payment reciept on
+                your registered Email-ID.
+            </p>
+        </div>
+    </div>
+{% endblock %}

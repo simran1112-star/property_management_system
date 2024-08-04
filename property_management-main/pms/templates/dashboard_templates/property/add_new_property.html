@@ -1,0 +1,366 @@
+{% extends 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}<style></style>{% endblock %}
+{% block body %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="{% static 'geolocation.js' %}"></script>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h4 class="h4 text-gray-800 mt-4 mb-4">Add New Property</h4>
+        </div>
+        <div class="container">
+            <form action="{% url 'new_property' %}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">I'm Looking To</label>
+                    <select class="form-control" id="property_sr" name="property_sr" required>
+                        <option value="Sell">
+                            Sell
+                        </option>
+                        <option value="Rent">
+                            Rent
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">What Kind of Property You Have</label>
+                    <select class="form-control" id="property_type" name="property_type" required>
+                        <option value="Apartment">
+                            Apartment
+                        </option>
+                        <option value="Independent_Floor">
+                            Independent/Builder Floor
+                        </option>
+                        <option value="Villa">
+                            Villa
+                        </option>
+                        <option value="Duplex">
+                            Duplex
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="property_address">
+                        Where is your Property Located
+                    </label
+                    >
+                    <textarea class="form-control"
+                              id="property_address"
+                              name="property_address"
+                              rows="2"
+                              required
+                              placeholder="Enter Complete Address"></textarea>
+                </div>
+                <!-- Your HTML template -->
+<select name="property_state" class="form-control mt-4 mb-4" id="stateId" required>
+    <option value="">Select State</option>
+    {% for state in states %}
+        <option value="{{ state }}">{{ state }}</option>
+    {% endfor %}
+</select>
+
+<select name="property_city" class="form-control mt-4 mb-4" id="cityId" required>
+    <option value="">Select state before selecting city</option>
+    <!-- Cities options will be populated dynamically based on the selected state -->
+</select>
+
+<div class="col" class="form-control mt-4 mb-4">
+    <select name="zip_code"
+            class="form-control"
+            id="zip_code"
+            required>
+        <option value="">
+            Select city before selecting zip code
+        </option>
+        <!-- Zip codes options will be populated dynamically based on the selected city -->
+    </select>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="name">No. of Bedrooms</label>
+                        <select class="form-control" id="no_bedrooms" name="no_bedrooms" required>
+                            <option value="one">
+                                1
+                            </option>
+                            <option value="two">
+                                2
+                            </option>
+                            <option value="three">
+                                3
+                            </option>
+                            <option value="four">
+                                4
+                            </option>
+                            <option value="five">
+                                5
+                            </option>
+                            <option value="six">
+                                6
+                            </option>
+                            <option value="greater_then_6">
+                                More than 6
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="name">No. of Bathrooms</label>
+                        <select class="form-control" id="no_bathrooms" name="no_bathrooms" required>
+                            <option value="one">
+                                1
+                            </option>
+                            <option value="two">
+                                2
+                            </option>
+                            <option value="three">
+                                3
+                            </option>
+                            <option value="four">
+                                4
+                            </option>
+                            <option value="greater_then_4">
+                                More than 4
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="name">No. of Balconies</label>
+                        <select class="form-control" id="no_balconies" name="no_balconies" required>
+                            <option value="one">
+                                1
+                            </option>
+                            <option value="two">
+                                2
+                            </option>
+                            <option value="three">
+                                3
+                            </option>
+                            <option value="four">
+                                4
+                            </option>
+                            <option value="greater_then_4">
+                                More than 4
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="area_details">Area Details (Sq.Ft)</label>
+                        <input type="number"
+                               min="0"
+                               name="area_details"
+                               class="form-control"
+                               id="area_details"/>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="furnishing_type">Furnishing</label>
+                        <select class="form-control"
+                                id="furnishing_type"
+                                name="furnishing_type"
+                                required>
+                            <option value="Furnished">
+                                Furnished
+                            </option>
+                            <option value="Semi">
+                                Semi-Furnished
+                            </option>
+                            <option value="Unfunished">
+                                Un-funished
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <div class="row form-group">
+                            <div class="col">
+                                <label for="open_parking">Open Parking</label>
+                                <input type="number" min="0" name="open_parking" class="form-control" />
+                            </div>
+                            <div class="col">
+                                <label for="covered_parking">Covered Parking</label>
+                                <input type="number" min="0" name="covered_parking" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="availability_status">Availability Status</label>
+                        <select class="form-control"
+                                id="availability_status"
+                                name="availability_status"
+                                required>
+                            <option value="RM">
+                                Ready to Move
+                            </option>
+                            <option value="UC">
+                                Under Construction
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="property_age">Age of Property</label>
+                        <select class="form-control" id="property_age" name="property_age" required>
+                            <option value="zero_one">
+                                0-1 Years
+                            </option>
+                            <option value="one_five">
+                                1-5 Years
+                            </option>
+                            <option value="five_ten">
+                                5-10 Years
+                            </option>
+                            <option value="ten_fifteen">
+                                10-15 Years
+                            </option>
+                            <option value="more_then_fivteen">
+                                More than 15 Years
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="property_ownership">Ownership</label>
+                        <select class="form-control"
+                                id="property_ownership"
+                                name="property_ownership"
+                                required>
+                            <option value="Freehold">
+                                Freehold
+                            </option>
+                            <option value="Leasehold">
+                                Leasehold
+                            </option>
+                            <option value="Cooperative Society">
+                                Co-Operative Society
+                            </option>
+                            <option value="POA">
+                                Power of Attorney
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="expected_price">Expected Price (Rs)</label>
+                        <input type="number"
+                               min="0"
+                               class="form-control"
+                               name="expected_price"
+                               id="expected_price"
+                               placeholder="Expected Price"/>
+                    </div>
+                    <div class="col">
+                        <label for="price_sq_ft">Price per Sq.Ft (Rs)</label>
+                        <input type="number"
+                               min="0"
+                               class="form-control"
+                               name="price_sq_ft"
+                               id="price_sq_ft"
+                               placeholder="Price Sq.Ft"
+                               readonly/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="property_images">
+                        Upload Property Image
+                    </label
+                    >
+                    <input type="file"
+                           class="form-control"
+                           accept="image/*"
+                           multiple
+                           id="property_images"
+                           name="property_images"
+                           required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="amenities">Amenities</label>
+                    <textarea class="form-control"
+                              id="amenities"
+                              placeholder="Enter Multiple Amenities (GYM, Table Tennis Court, Swimming Pool)"
+                              name="amenities"
+                              rows="6"
+                              required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="property_unique_details">
+                        Property Description
+                    </label
+                    >
+                    <textarea class="form-control"
+                              id="property_unique_details"
+                              name="property_unique_details"
+                              rows="4"
+                              required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </form>
+        </div>
+        {% block js %}
+            <script type="text/javascript">
+    $(document).ready(function () {
+      $("#expected_price").keyup(function () {
+        var total_area_size = parseFloat($("#area_details").val());
+        var expected_amount = parseFloat($("#expected_price").val());
+        var price_per_sq_ft = expected_amount / total_area_size;
+        $("#price_sq_ft").val(price_per_sq_ft.toFixed(2));
+      });
+    });
+    <!-- Your HTML template -->
+    document.getElementById('cityId').addEventListener('change', function() {
+        var cityName = this.value;
+        fetch(`/get_zip_codes/?city_name=${cityName}`)
+            .then(response => response.json())
+            .then(data => {
+                var zipCodeSelect = document.getElementById('zip_code');
+                zipCodeSelect.innerHTML = '';
+                data.forEach(zipCode => {
+                    var option = document.createElement('option');
+                    option.value = zipCode;
+                    option.textContent = zipCode;
+                    zipCodeSelect.appendChild(option);
+                });
+            });
+    });
+    
+        document.getElementById('stateId').addEventListener('change', function() {
+            var stateName = this.value;
+            fetch(`/get_cities/?state_name=${stateName}`)
+                .then(response => response.json())
+                .then(data => {
+                    var citySelect = document.getElementById('cityId');
+                    citySelect.innerHTML = '';
+                    data.forEach(city => {
+                        var option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                });
+        });
+    
+    
+            </script>
+        {% endblock %}
+    {% endblock %}
+</div>

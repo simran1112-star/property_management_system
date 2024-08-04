@@ -1,0 +1,53 @@
+{% extends 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}<style></style>{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 text-gray-800 mt-4 mb-4">Add New Blog</h1>
+        </div>
+        <div class="container">
+            <form action="{% url 'new_blog' %}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Title of the Blog</label>
+                    <input type="text" class="form-control" id="title" required name="title" />
+                </div>
+                <div class="form-group">
+                    <label for="desc">Body of the Blog</label>
+                    <textarea class="form-control" id="body" name="body" rows="7" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="blog_img">Upload Image</label>
+                    <input type="file"
+                           class="form-control"
+                           accept="image/*"
+                           id="blog_img"
+                           name="blog_image"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </form>
+        </div>
+    {% endblock %}
+</div>

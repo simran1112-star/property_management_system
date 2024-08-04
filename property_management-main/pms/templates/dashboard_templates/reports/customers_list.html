@@ -1,0 +1,96 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+  .custom {
+    color: darkblue;
+  }
+  .chart-container {
+    margin: auto;
+  }
+  #sub {
+    cursor: default !important;
+    color: green;
+  }
+
+  #no_sub {
+    cursor: default !important;
+    color: red;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" style="padding-top: 10px" role="alert" id="message">
+                {{ message }}
+                <button type="button" class="close" style="padding-top: 10px" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">Customers</h1>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Contact No</th>
+                    <th scope="col">Email ID</th>
+                    <th scope="col">Total Uploaded Properties</th>
+                    <th scope="col">Profile Photo</th>
+                    <th scope="col">Last Login</th>
+                    <th scope="col">Date Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in customers_data %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ i.user.first_name }}</td>
+                        <td>{{ i.user.last_name }}</td>
+                        <td>{{ i.contact }}</td>
+                        <td>{{ i.user.email }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'properties_uploaded_by_user' %}"
+                               target="_blank"
+                               class="btn btn-primary"><i class="fas fa-home"></i
+                            ></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'view_user_image' i.id %}"
+                               target="_blank"
+                               class="btn btn-warning"><i class="fas fa-user-secret"></i
+                            ></a>
+                        </td>
+                        <td>{{ i.user.last_login|date }}</td>
+                        <td>{{ i.user.date_joined|date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+  $(document).ready(function () {
+    $("#myTable").DataTable();
+  });
+    </script>
+{% endblock %}

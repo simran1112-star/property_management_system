@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Dream Homes</title>
+        <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}"
+              rel="stylesheet"
+              type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+              rel="stylesheet">
+        <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+        <!-- Favicons -->
+        <link href="{% static 'assets/img/favicon.jpg' %}" rel="icon">
+    </head>
+    {% block css %}{% endblock %}
+    <body id="page-top">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+                id="accordionSidebar">
+                <!-- Sidebar - Brand -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                   href="{% url 'dashboard' %}">
+                    <div class="sidebar-brand-text">Dream Homes</div>
+                </a>
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            <i class="fas fa-blog"></i>
+                            <span>Blogs</span>
+                        </a>
+                        <div id="collapseThree"
+                             class="collapse"
+                             aria-labelledby="headingTwo"
+                             data-parent="#accordionSidebar">
+
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                {% if seller %}
+                                <a class="collapse-item" href="{% url 'new_blog' %}">Add New Blog</a>
+                                <a class="collapse-item" href="{% url 'blog_list' %}">List All Blogs</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                            <i class="fas fa-home"></i>
+                            <span>Property</span>
+                        </a>
+                        <div id="collapseFour"
+                             class="collapse"
+                             aria-labelledby="headingTwo"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                {% if seller %}
+                                    <a class="collapse-item" href="{% url 'new_property' %}">Add New Property</a>
+                                {% endif %}
+                                <a class="collapse-item" href="{% url 'property_list' %}">List Uploaded Properties</a>
+                                <hr>
+                                <a class="collapse-item" href="{% url 'pending_properties' %}">Pending Properties</a>
+                                {% if seller %}
+                                <a class="collapse-item" href="{% url 'listed_properties' %}">Listed Properties</a>
+                                <a class="collapse-item" href="{% url 'unlisted_properties' %}">Unlisted Properties</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emi_calculator' %}">
+                            <i class="fas fa-calculator"></i>
+                            <span>EMI Calculator</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                            <i class="fas fa-file"></i>
+                            <span>Reports</span>
+                        </a>
+                        <div id="collapseFive"
+                             class="collapse"
+                             aria-labelledby="headingTwo"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="{% url 'revenue_details' %}">Revenue Details</a>
+                                <a class="collapse-item" href="{% url 'agents_list' %}">Agents Details</a>
+                                <a class="collapse-item" href="{% url 'customers_list_view' %}">Customer Details</a>
+                                <a class="collapse-item" href="{% url 'total_uploaded_properties' %}">Total Uploaded Properties</a>
+                                <a class="collapse-item" href="{% url 'total_listed_properties' %}">Total Listed Properties</a>
+                                <a class="collapse-item" href="{% url 'total_unlisted_properties' %}">Total Unlisted Properties</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="fas fa-poll"></i>
+                            <span>Summary</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="fas fa-key"></i>
+                            <span>Logout</span></a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                            <i class="fas fa-home"></i>
+                            <span>Property</span>
+                        </a>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                {% if seller %}
+
+                                <a class="collapse-item" href="{% url 'new_property' %}">Add New Property</a>
+                                {% endif %}
+                                <a class="collapse-item" href="{% url 'property_list' %}">List Uploaded Properties</a>
+                                {% if seller %}
+
+                                <a class="collapse-item" href="{% url 'listed_properties' %}">Listed Properties</a>
+                                <a class="collapse-item" href="{% url 'unlisted_properties' %}">Unlisted Properties</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emi_calculator' %}">
+                            <i class="fas fa-calculator"></i>
+                            <span>EMI Calculator</span></a>
+                    </li>
+                    <li class="nav-item">
+                        {% if seller %}
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="fas fa-poll"></i>
+                            <span>Summary</span></a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="fas fa-key"></i>
+                            <span>Logout</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+            <!-- End of Sidebar -->
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                <!-- Main Content -->
+                <div id="content">
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-0 static-top shadow">
+                        <!-- Topbar Navbar -->
+                        <ul class="navbar-nav ml-auto">
+                            <div class="topbar-divider d-none d-sm-block">
+                            </div>
+                            <!-- Nav Item - User Information -->
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><b>{{ request.user.first_name }}
+                                    {{ request.user.last_name }}</b></span>
+                                    <img class="img-profile rounded-circle"
+                                         src="{{ request.user.user_profile.user_image.url }}">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="{% url 'profile' %}">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                    <div class="dropdown-divider">
+                                    </div>
+                                    <a class="dropdown-item" href="{% url 'forgot_password_url' %}">
+                                        <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Reset Password
+                                    </a>
+                                    <div class="dropdown-divider">
+                                    </div>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- End of Topbar -->
+                    {% block body %}{% endblock %}
+                </body>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
+                <!-- Bootstrap core JavaScript-->
+                <script src="{% static 'js/jquery.min.js' %}"></script>
+                <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+                <!-- Core plugin JavaScript-->
+                <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+                <!-- Custom scripts for all pages-->
+                <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+                <link rel="stylesheet"
+                      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+                </script>
+                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js">
+                </script>
+                <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js">
+                </script>
+                <script>
+    var message_ele = document.getElementById("message");
+    setTimeout(function () {
+        $(message_ele).fadeOut('slow');
+    }, 1000);
+
+                </script>
+                {% block js %}{% endblock %}
+            </html>

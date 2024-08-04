@@ -1,0 +1,75 @@
+{% extends 'ui_templates/base.html' %}
+{% load static %}
+{% block css %}<style></style>{% endblock %}
+{% block body %}
+    <section class="hero-wrap ftco-degree-bg" style="background-image: url('/static/ui_templates_static_files/images/bg_1.jpg')"
+             data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate pb-5 text-center">
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                        <span>Blogs<i class="ion-ios-arrow-forward"></i></span>
+                    </p>
+                    <h1 class="mb-3 bread">Our Blogs</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row d-flex">
+                {% for i in page_obj %}
+                    <div class="col-md-3 d-flex ftco-animate">
+                        <div class="blog-entry justify-content-end">
+                            <div class="text">
+                                <h3 class="heading">
+                                    <a href="{% url 'blog_description' i.id %}">{{ i.blog_title }}</a>
+                                </h3>
+                                <div class="meta mb-3">
+                                    <div>
+                                        <a href="{% url 'blog_description' i.id %}">{{ i.created_at }}</a>
+                                    </div>
+                                </div>
+                                <a href="{% url 'blog_description' i.id %}"
+                                   class="block-20 img"
+                                   style="background-image: url('{{ i.blog_image.url }}')">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row mt-5">
+                <div class="col text-center">
+                    <div class="block-27">
+                        <ul>
+                            {% if page_obj.has_previous %}
+                                <li>
+                                    <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                                </li>
+                            {% endif %}
+                            {% for page_no in page_obj.paginator.page_range %}
+                                {% if page_obj.number == page_no %}
+                                    <li class="active">
+                                        <a href="?page={{ page_no }}">{{ page_no }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="?page={{ page_no }}">{{ page_no }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'ui_templates/base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .h-100 {
+    padding-top: 50px !important;
+  }
+  .img-fluid {
+    height: 100%;
+  }
+  .justify-content-end {
+    justify-content: center !important;
+  }
+  .btn {
+    font-size: 20px !important;
+  }
+  .btn-lg {
+    padding: 1rem 5rem !important;
+  }
+  .card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+  }
+  .card-registration .select-arrow {
+    top: 13px;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+        <div class="container py-5 h-500 mt-5">
+            <div class="row d-flex justify-content-center align-items-center h-500">
+                <div class="col">
+                    <div class="card card-registration my-4">
+                        <div class="row g-0">
+                            <div class="col-xl-6 col-md-6 d-none d-xl-block">
+                                <img src="{% static 'ui_templates_static_files/images/bg_1.jpg' %}"
+                                     alt="Property Image"
+                                     class="img-fluid"
+                                     style="border-top-left-radius: 0.25rem;
+                                            border-bottom-left-radius: 0.25rem"/>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <form action=""
+                                      class="signin-form"
+                                      method="POST"
+                                      enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="card-body p-md-5 text-black">
+                                        <h3 class="mb-5 text-uppercase">Registration Form</h3>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <input type="text" id="first_name" name="fname" class="form-control form-control-lg" placeholder="First Name" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <input type="text" id="last_name" name="lname" class="form-control form-control-lg" placeholder="Last Name" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <input type="text" id="contact_no" name="contact" class="form-control form-control-lg" placeholder="Contact No" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <input type="email" id="email_id" name="email" class="form-control form-control-lg" placeholder="Email-ID" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <select class="form-control" id="user_type" name="user_type" required>
+                                                <option value="Buyer">Buyer</option>
+                                                <option value="Agent">Agent</option>
+                                            </select>
+                                            <label class="form-label" for="form3Example9">User Type</label>
+                                        </div>
+                                        <div class="form-outline mb-4">
+                                            <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Set your Password" required/>
+                                        </div>
+                                        <div class="form-outline mb-4">
+                                            <input class="form-control form-control-lg" type="file" id="profile_image" accept="image/*" name="profile_image" required/>
+                                            <label class="form-label" for="form3Example9">
+                                                Profile Image
+                                            </label
+                                            >
+                                        </div>
+                                        <div class="d-flex justify-content-end pt-3">
+                                            <button type="submit" class="btn btn-primary btn-lg ms-2">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

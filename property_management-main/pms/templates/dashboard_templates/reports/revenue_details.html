@@ -1,0 +1,89 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+  .custom {
+    color: darkblue;
+  }
+  .chart-container {
+    margin: auto;
+  }
+  .bs {
+    margin-top: 2rem !important;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" style="padding-top: 10px" role="alert" id="message">
+                {{ message }}
+                <button type="button" class="close" style="padding-top: 10px" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">Revenue Details</h1>
+        </div>
+        <div class="container">
+            <form action="{% url 'revenue_details' %}" method="POST">
+                {% csrf_token %}
+                <div class="row form-group">
+                    <div class="col-4">
+                        <label for="from_date">From:</label>
+                        <input type="date" class="form-control" name="from_date" />
+                    </div>
+                    <div class="col-4">
+                        <label for="to_date">To:</label>
+                        <input type="date" class="form-control" name="to_date" />
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary bs">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br />
+        {% if revenue_details %}
+            <table class="table table-hover" id="myTable">
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Payment Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Payment Order ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in revenue_details %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ i.payment_date }}</td>
+                            <td>{{ i.property_membership_amount }}</td>
+                            <td>{{ i.payment_order_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endblock %}
+    {% block js %}
+        <script>
+    $(document).ready(function () {
+      $("#myTable").DataTable();
+    });
+        </script>
+    {% endblock %}
+</div>

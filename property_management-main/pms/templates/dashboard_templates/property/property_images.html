@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>Property Images</title>
+        <meta charset="utf-8" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, user-scalable=no"/>
+        <link rel="stylesheet"
+              href="{% static 'image_template/assets/css/main.css' %}"/>
+        <noscript>
+            <link rel="stylesheet"
+                  href="{% static 'image_template/assets/css/noscript.css' %}"/>
+        </noscript>
+    </head>
+    <body class="is-preload">
+        <!-- Wrapper -->
+        <div id="wrapper">
+            <header id="header">
+                <h1>
+                    <strong>Dream Homes</strong>
+                </h1>
+            </header>
+            <!-- Main -->
+            <div id="main">
+                {% for i in property_images %}
+                    <article class="thumb">
+                        <a href="{{ i.images.url }}" class="image">
+                            <img src="{{ i.images.url }}" alt="" />
+                        </a>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Scripts -->
+        <script src="{% static 'image_template/assets/js/jquery.min.js' %}"></script>
+        <script src="{% static 'image_template/assets/js/jquery.poptrox.min.js' %}"></script>
+        <script src="{% static 'image_template/assets/js/browser.min.js' %}"></script>
+        <script src="{% static 'image_template/assets/js/breakpoints.min.js' %}"></script>
+        <script src="{% static 'image_template/assets/js/util.js' %}"></script>
+        <script src="{% static 'image_template/assets/js/main.js' %}"></script>
+    </body>
+</html>

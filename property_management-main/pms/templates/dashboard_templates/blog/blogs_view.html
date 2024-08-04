@@ -1,0 +1,119 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+
+  .custom {
+    color: darkblue;
+  }
+
+  .chart-container {
+    margin: auto;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">Blogs List</h1>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Body</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in all_blogs %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ i.blog_title }}</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-success mr-2"
+                                    data-toggle="modal"
+                                    data-target="#see-list-{{ i.id }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="modal fade"
+                                 id="see-list-{{ i.id }}"
+                                 tabindex="-1"
+                                 aria-labelledby="exampsee-list-{{ i.id }}"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-12 mb-3">
+                                                    <div class="row">
+                                                        <div class="col-8">{{ i.blog_body }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{{ i.blog_image.url }}" target="_blank" class="btn btn-warning"><i class="fas fa-eye"></i
+                            ></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'update_blog' i.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i
+                            ></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'delete_blog' i.id %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i
+                            ></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+  $(document).ready(function () {
+    $("#myTable").DataTable();
+  });
+    </script>
+{% endblock %}

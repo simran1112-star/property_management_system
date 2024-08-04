@@ -1,0 +1,144 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+  .custom {
+    color: darkblue;
+  }
+  .chart-container {
+    margin: auto;
+  }
+  .animate-charcter {
+    text-transform: uppercase;
+    background-image: linear-gradient(
+      -225deg,
+      #231557 0%,
+      #44107a 29%,
+      #ff1361 67%,
+      #fff800 100%
+    );
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textclip 2s linear infinite;
+    display: inline-block;
+    font-size: 15px;
+  }
+  @keyframes textclip {
+    to {
+      background-position: 200% center;
+    }
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show"
+                 style="padding-top: 10px"
+                 role="alert"
+                 id="message">
+                {{ message }}
+                <button type="button"
+                        class="close"
+                        style="padding-top: 10px"
+                        data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">Responses</h1>
+            {% if not property_contacts %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h3 class="animate-charcter">
+                                Note: (You have to Purchase Property Membership in order to see
+                                their Responses...)
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Property ID</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Client Email ID</th>
+                    <th scope="col">Client Contact No</th>
+                    <th scope="col">Client Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in property_contacts %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ i.property.property_id }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.email }}</td>
+                        <td>{{ i.contact }}</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-toggle="modal"
+                                    data-target="#exampleModalCenter{{ i.id }}">
+                                View
+                            </button>
+                        </td>
+                        <!-- Modal -->
+                        <div class="modal fade"
+                             id="exampleModalCenter{{ i.id }}"
+                             tabindex="-1"
+                             role="dialog"
+                             aria-labelledby="exampleModalCenterTitle"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">{{ i.comments }}</div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+  $(document).ready(function () {
+    $("#myTable").DataTable();
+  });
+    </script>
+{% endblock %}

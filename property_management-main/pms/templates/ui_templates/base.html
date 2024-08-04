@@ -1,0 +1,200 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Dream Homes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/open-iconic-bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/owl.carousel.min.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/owl.theme.default.min.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/magnific-popup.css' %}">
+        <link href="{% static 'assets/img/favicon.jpg' %}" rel="icon">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/aos.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/ionicons.min.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/bootstrap-datepicker.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/jquery.timepicker.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/flaticon.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/icomoon.css' %}">
+        <link rel="stylesheet" href="{% static 'ui_templates_static_files/css/style.css' %}">
+    </head>
+    {% block css %}<style></style>{% endblock %}
+    <body>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" style="padding-top: 10px" role="alert" id="message">
+                    {{ message }}
+                    <button type="button" class="close" style="padding-top: 10px" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+             id="ftco-navbar">
+            <div class="container">
+                <a class="navbar-dark" href="{% url 'index' %}">Dream Homes</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="oi oi-menu"></span> Menu
+                </button>
+                <div class="collapse navbar-collapse" id="ftco-nav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'about' %}" class="nav-link">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'all_properties' %}" class="nav-link">Properties</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'blogs' %}" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                        {% if seller %}
+                        
+                            <a href="{% url 'new_property' %}" class="nav-link">Post Property</a>
+                        
+                        {% elif buyer %}
+                            <a href="{% url 'new_property' %}" class="nav-link">View Properties</a>
+                        {% endif %}
+                    </li>
+                        {% if user.is_authenticated %}
+                            {% if seller %}
+
+                            <li class="nav-item">
+                                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'login' %}" class="nav-link">Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- END nav -->
+        {% block body %}{% endblock %}
+        
+        <footer class="ftco-footer ftco-section">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="ftco-footer-widget mb-4">
+                            <h2 class="ftco-heading-2">Dream Homes</h2>
+                            <p>
+                                Founded in 2022, Dream Homes is India’s most innovative real estate advertising platform for homeowners,
+                                landlords, developers, and real estate brokers. The company offers listings for new homes, resale homes,
+                                rentals, plots and co-living spaces in India. Backed by strong research and analytics, the company’s
+                                experts provide comprehensive real estate services that cover advertising and marketing, sales solutions
+                                for real estate developers, personalized search, virtual viewing, end-to-end transaction services, and
+                                post-transaction services to consumers for both buying and renting.
+                            </p>
+                            <ul class="ftco-footer-social list-unstyled mt-5">
+                                <li class="ftco-animate">
+                                    <a href="https://twitter.com/i/flow/login"><span class="icon-twitter"></span></a>
+                                </li>
+                                <li class="ftco-animate">
+                                    <a href="https://www.facebook.com/"><span class="icon-facebook"></span></a>
+                                </li>
+                                <li class="ftco-animate">
+                                    <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="ftco-footer-widget mb-4">
+                            <h2 class="ftco-heading-2">Company</h2>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="{% url 'index' %}"><span class="icon-long-arrow-right mr-2"></span>Home</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'about' %}"><span class="icon-long-arrow-right mr-2"></span>About Us</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'all_properties' %}"><span class="icon-long-arrow-right mr-2"></span>Property</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blogs' %}"><span class="icon-long-arrow-right mr-2"></span>Blogs</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'contact' %}"><span class="icon-long-arrow-right mr-2"></span>Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="ftco-footer-widget mb-4">
+                            <h2 class="ftco-heading-2">Have a Questions?</h2>
+                            <div class="block-23 mb-3">
+                                <ul>
+                                    <li>
+                                        <a href="tel:+917065971154"><span class="icon icon-phone"></span><span class="text">+91 7065971154</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="mailto:dreamhomes202301@gmail.com"><span class="icon icon-envelope pr-4"></span><span class="text">dreamhomes202301@gmail.com</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- loader -->
+        <div id="ftco-loader" class="show fullscreen">
+            <svg class="circular" width="48px" height="48px">
+                <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+            </svg>
+        </div>
+        <script src="{% static 'ui_templates_static_files/js/jquery.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery-migrate-3.0.1.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/popper.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.easing.1.3.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.waypoints.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.stellar.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.magnific-popup.min.j' %}s"></script>
+        <script src="{% static 'ui_templates_static_files/js/aos.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.animateNumber.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/bootstrap-datepicker.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/jquery.timepicker.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/scrollax.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/js/main.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/animsition/js/animsition.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/bootstrap/js/popper.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/select2/select2.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/daterangepicker/moment.min.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/daterangepicker/daterangepicker.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/vendor/countdowntime/countdowntime.js' %}"></script>
+        <script src="{% static 'ui_templates_static_files/login/js/main.js' %}"></script>
+        <script>
+    var message_ele = document.getElementById("message");
+    setTimeout(function() {
+        $(message_ele).fadeOut('slow');
+    }, 1000);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,100 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% load custom_template_tags %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+  .custom {
+    color: darkblue;
+  }
+  .chart-container {
+    margin: auto;
+  }
+  #sub {
+    cursor: default !important;
+    color: green;
+  }
+  #no_sub {
+    cursor: default !important;
+    color: red;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" style="padding-top: 10px" role="alert" id="message">
+                {{ message }}
+                <button type="button" class="close" style="padding-top: 10px" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">All Properties</h1>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Property ID</th>
+                    <th scope="col">Uploaded On</th>
+                    <th scope="col">Approved On</th>
+                    <th scope="col">Property Type</th>
+                    <th scope="col">Membership</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in all_uploaded_properties %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ i.property_id }}</td>
+                        <td>{{ i.created_on }}</td>
+                        <td>{{ i.approved_on }}</td>
+                        <td>{{ i.type|replace_underscores }}</td>
+                        <td>
+                            {% if i.property_membership.all %}
+                                <i class="fas fa-check fa-2x" id="sub"></i>
+                            {% else %}
+                                <i class="fas fa-times fa-2x" id="no_sub"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'view_property' i.id 'view' %}"
+                               target="_blank"
+                               class="btn btn-success">View</a
+                                >
+                            </td>
+                            <td>
+                                <a href="{% url 'view_property_images' i.id %}"
+                                   target="_blank"
+                                   class="btn btn-warning">Images</a
+                                    >
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endblock %}
+        {% block js %}
+            <script>
+  $(document).ready(function () {
+    $("#myTable").DataTable();
+  });
+            </script>
+        {% endblock %}

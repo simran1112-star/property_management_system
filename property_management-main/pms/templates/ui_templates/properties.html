@@ -1,0 +1,126 @@
+{% extends 'ui_templates/base.html' %}
+{% load custom_template_tags %}
+{% load static %}
+{% block body %}
+    <section class="hero-wrap ftco-degree-bg"
+             style="background-image: url('/static/ui_templates_static_files/images/bg_1.jpg')"
+             data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate pb-5 text-center">
+                    <p class="breadcrumbs"> <span class="mr-2"> <a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i>
+                    </a>
+                </span>
+                <span>Properties <i class="ion-ios-arrow-forward"></i></span>
+            </p>
+            <h1 class="mb-3 bread"> Choose <br> Your Desired Home
+            </h1>
+        </div>
+    </div>
+</div>
+</section>
+<section class="ftco-section">
+    <div class="col-md-4">
+        <div class="sidebar-box">
+            <form action="{% url 'all_properties' %}" method="GET" class="search-form">
+                <div class="form-group">
+                    <select class="form-control" id="sort" name="sort">
+                        <option value='lth'>Price | Low to High</option>
+                        <option value='htl'>Price | High to Low</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span class="icon icon-search"></span>
+                    <input type="text" name='searching_filters' class="form-control" placeholder="Search Property (Location/ Property Type)">
+                </input>
+            </div>
+            <div class="form-group">
+                <span class="icon icon-search"></span>
+                <input type="text" name='property_size' class="form-control" placeholder="Property Size">
+            </input>
+        </div>
+        <div class="form-group">
+            <span class="icon icon-search"></span>
+            <input type="text" name='nearbuy_location' class="form-control" placeholder="Nearbuy Location">
+        </input>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+</div>
+</div>
+<div class="container">
+    <div class="row">
+        {% for i in page_obj %}
+            <div class="col-md-6">
+                <div class="property-wrap ftco-animate">
+                    <a href="{% url 'property_details' i.id %}"
+                       class="img"
+                       style="background-image: url('{{ i.property_images.first.images.url }}')"></a>
+                    <div class="text">
+                        {% if i.sell_rent == 'Sell' %}
+                            <p class="price">
+                                <span class="orig-price">Sell | Rs {{ i.expected_price }}</span>
+                            </p>
+                        {% else %}
+                            <p class="price">
+                                <span class="orig-price">Rent | Rs {{ i.expected_price }}<small>/mo</small></span>
+                            </p>
+                        {% endif %}
+                        <ul class="property_list">
+                            <li>
+                                <span class="flaticon-bed"></span>{{ i.bedrooms|number_value }}
+                            </li>
+                            <li>
+                                <span class="flaticon-bathtub"></span>{{ i.bathrooms|number_value }}
+                            </li>
+                            <li>
+                                <span class="flaticon-floor-plan"></span>{{ i.area }} ft
+                                <sup>2</sup>
+                            </li>
+                        </ul>
+                        <h3>
+                            <a href="{% url 'property_details' i.id %}">Property ID: {{ i.property_id }}</a>
+                        </h3>
+                        <span class="location">{{ i.state }}</span>
+                        <a href="{% url 'property_details' i.id %}"
+                           class="d-flex align-items-center justify-content-center btn-custom">
+                            <span class="ion-md-arrow-forward"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row mt-5">
+        <div class="col text-center">
+            <div class="block-27">
+                <ul>
+                    {% if page_obj.has_previous %}
+                        <li>
+                            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                        </li>
+                    {% endif %}
+                    {% for page_no in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page_no %}
+                            <li class="active">
+                                <a href="?page={{ page_no }}">{{ page_no }}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ page_no }}">{{ page_no }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li>
+                            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

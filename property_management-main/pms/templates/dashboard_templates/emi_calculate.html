@@ -1,0 +1,127 @@
+{% include 'dashboard_templates/dashboard_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .lead {
+    color: red;
+    font-weight: bold;
+  }
+  .value {
+    color: green;
+    font-weight: bold;
+  }
+  .custom {
+    color: darkblue;
+  }
+  .chart-container {
+    margin: auto;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" style="padding-top: 10px" role="alert" id="message">
+                {{ message }}
+                <button type="button" class="close" style="padding-top: 10px" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 mt-4 mb-4">EMI Calculator</h1>
+        </div>
+        <div class="container">
+            <form action="{% url 'emi_calculator' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="loan_amount">Loan Amount</label>
+                    <input type="number" class="form-control" id="loan_amount" placeholder="Enter Loan Amount (Rs)" required name="amount" min="1"/>
+                </div>
+                <div class="form-group">
+                    <label for="interest">Interest Rate %</label>
+                    <input type="number" class="form-control" id="interest" placeholder="Enter Interest Rate (P.A)" required name="interest" min="0.1" step="0.1"/>
+                </div>
+                <div class="form-group">
+                    <label for="tenure">Tenure</label>
+                    <input type="number" class="form-control" id="tenure" min="1" step="1" placeholder="Tenure (In Months)" name="tenure"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        {% if monthly_emi %}
+            <div class="jumbotron jumbotron-fluid mt-5">
+                <div class="container">
+                    <h2 class="display-5 mb-5 custom">Equated Monthly Installments</h2>
+                    <p class="lead">
+                        Total Principal Amount:
+                        <span class="value">{{ amount|floatformat:2 }}</span>
+                    </p>
+                    <p class="lead">
+                        Tenure (In Months): <span class="value">{{ tenure }}</span>
+                    </p>
+                    <p class="lead">
+                        Rate of Interest: <span class="value">{{ interest|floatformat:2 }}</span>
+                    </p>
+                    <p class="lead">
+                        Monthly EMI: <span class="value">{{ monthly_emi|floatformat:2 }}</span>
+                    </p>
+                    <p class="lead">
+                        Total Interest Payable:
+                        <span class="value">{{ total_interest_amount|floatformat:2 }}</span>
+                    </p>
+                    <p class="lead">
+                        Total Payment ((Principal + Interest)):
+                        <span class="value">{{ total_amount|floatformat:2 }}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="chart-container"
+                 style="position: relative;
+                        height: 20%;
+                        width: 20%">
+                <canvas id="myChart"></canvas>
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% block js %}
+        <script>
+    const labels = [
+      "Principal Amount",
+      "Interest Amount",
+      "Total Amount Payable",
+    ];
+
+    const data = {
+      responsive: true,
+      maintainAspectRatio: true,
+      labels: labels,
+      datasets: [
+        {
+          label: "EMI Calculate",
+          backgroundColor: [
+            "rgb(28, 205, 52)",
+            "rgb(245, 28, 12)",
+            "rgb(12, 51, 245)",
+          ],
+          data: [
+            "{{ amount|floatformat:2 }}",
+            "{{ total_interest_amount|floatformat:2 }}",
+            "{{total_amount|floatformat:2}}",
+          ],
+        },
+      ],
+    };
+
+    const config = {
+      type: "pie",
+      data: data,
+      options: {},
+    };
+        </script>
+        <script>const myChart = new Chart(document.getElementById("myChart"), config);</script>
+    {% endblock %}
+</div>

@@ -1,0 +1,122 @@
+{% extends 'ui_templates/base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+  .p-b-33 {
+    padding-bottom: 30px !important;
+  }
+  .text-box {
+    margin-left: 44vw;
+    margin-top: 42vh;
+  }
+  .btn:link,
+  .btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 51px;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all 0.2s;
+    position: absolute;
+  }
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  .btn-white {
+    background-color: #03fcd3;
+    color: #fff;
+  }
+  .btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all 0.4s;
+  }
+  .btn-white::after {
+    background-color: #fff;
+  }
+  .btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+  }
+  .btn-animated {
+    animation: moveInBottom 5s ease-out;
+    animation-fill-mode: backwards;
+  }
+  @keyframes moveInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+  .reset-password {
+    margin-top: 50px;
+    color: #c72584;
+  }
+  .reset-password:hover {
+    color: red;
+  }
+  .right-pos {
+    justify-content: right !important;
+    padding-right: 20px;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/css/vendor/bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/vendor/animate/animate.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/vendor/css-hamburgers/hamburgers.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/vendor/animsition/css/animsition.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/vendor/select2/select2.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/vendor/daterangepicker/daterangepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/css/util.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui_templates_static_files/login/css/main.css' %}"/>
+    <div class="limiter">
+        <section class="hero-wrap ftco-degree-bg"
+                 style="background-image: url('/static/ui_templates_static_files/images/bg_1.jpg')"
+                 data-stellar-background-ratio="0.5">
+            <div class="container-login100">
+                <div class="wrap-login100 p-t-100 p-b-10">
+                    <form class="login100-form validate-form p-b-33 p-t-5" action="" method="POST">
+                        {% csrf_token %}
+                        <div class="wrap-input100 validate-input" data-validate="Enter Email ID">
+                            <input class="input100" type="text" name="email" placeholder="Email" />
+                            <span class="focus-input100" data-placeholder="&#xe82a;"></span>
+                        </div>
+                        <div class="wrap-input100 validate-input" data-validate="Enter password">
+                            <input class="input100" type="password" name="password" placeholder="Password"/>
+                            <span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                        </div>
+                        <div class="container-login100-form-btn m-t-32">
+                            <button type="submit" class="login100-form-btn">Login</button>
+                        </div>
+                        <div class="container-login100-form-btn m-t-32">
+                            <a href="{% url 'register' %}" class="btn btn-white btn-animate">Sign Up</a>
+                            </div>
+                            <div class="container-login100-form-btn m-t-32 right-pos">
+                                <a href="{% url 'forgot_password_url' %}" class="reset-password">Forgot Password</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="dropDownSelect1"></div>
+        {% endblock %}

@@ -1,0 +1,21 @@
+{% load static %}
+{% block css %}
+    <style>
+  body,
+  html {
+    height: 100%;
+  }
+  .bg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+    </style>
+{% endblock %}
+{% block body %}
+    <img src="{% static 'assets/img/404.jpg' %}" class="bg" alt="" />
+{% endblock %}
